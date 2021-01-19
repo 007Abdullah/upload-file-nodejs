@@ -21,14 +21,27 @@
 
 
 
-    <!--CASE 2:  incase you want make request using javacript, its my favourite because it gives me not just just html5 validation on form but I can also apply some javascript conditions before submiting form-->
+    <!--CASE 2:  incase you want make request using javacript,
+        its my favourite because it gives me not just just html5 validation on form but 
+        I can also apply some javascript conditions before submiting form-->
     <form onsubmit="return upload()">
-        <!-- dont get confused with return keyword inside onsubmit, it is there to prevent html page to reload/default behaviour, and this have nothing to do with actual file upload process but if you remove it page will reload on submit -->
+        <!-- dont get confused with return keyword inside onsubmit, 
+            it is there to prevent html page to reload/default behaviour,
+            and this have nothing to do with actual file upload process 
+            but if you remove it page will reload on submit -->
 
-        <input required type="file" id="fileInput">
+        <input required type="file" id="fileInput" onchange="previewFile()">
+
         <button type="submit"> Upload </button>
-    </form>
 
+
+    </form>
+    <br>
+    <br>
+    <br>
+    <div>
+        <img src="" height="200">
+    </div>
 
     <script>
         function upload() {
@@ -69,7 +82,10 @@
                 headers: { 'Content-Type': 'multipart/form-data' }
             })
                 .then(res => {
-                    console.log(`upload Success` + res.data);
+                    console.log(`  upload Success`, res.data);
+                    // document.getElementById("show_pic").innerHTML = instanceOfFileReader.readAsDataURL(res.data);
+
+
                 })
                 .catch(err => {
                     console.log(err);
@@ -78,6 +94,27 @@
             return false; // dont get confused with return false, it is there to prevent html page to reload/default behaviour, and this have nothing to do with actual file upload process but if you remove it page will reload on submit -->
 
         }
+
+
+
+
+
+
+        function previewFile() {
+            const preview = document.querySelector('img');
+            const file = document.querySelector('input[type=file]').files[0];
+            const reader = new FileReader();
+
+            reader.addEventListener("load", function () {
+                // convert image file to base64 string
+                preview.src = reader.result;
+            }, false);
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+
     </script>
 </body>
 

@@ -2,7 +2,7 @@ const express = require("express");
 const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const cors = require("cors");
-const fs = require('fs')
+const fs = require('fs');
 
 //==============================================
 const multer = require('multer')
@@ -19,23 +19,26 @@ var upload = multer({ storage: storage })
 
 const admin = require("firebase-admin");
 // https://firebase.google.com/docs/storage/admin/start
-var serviceAccount = { // create service account from here: https://console.firebase.google.com/u/0/project/delete-this-1329/settings/serviceaccounts/adminsdk
-    "type": "xxxxxxxxxxxxxxxxx",
-    "project_id": "xxxxxxxxxxxxxxxxx",
-    "private_key_id": "xxxxxxxxxxxxxxxxx",
-    "private_key": "xxxxxxxxxxxxxxxxx",
-    "client_email": "xxxxxxxxxxxxxxxxx",   // replace these with your service account credentials
-    "client_id": "xxxxxxxxxxxxxxxxx",
-    "auth_uri": "xxxxxxxxxxxxxxxxx",
-    "token_uri": "xxxxxxxxxxxxxxxxx",
-    "auth_provider_x509_cert_url": "xxxxxxxxxxxxxxxxx",
-    "client_x509_cert_url": "xxxxxxxxxxxxxxxxx"
-};
+var serviceAccount = {
+    // create service account from here: https://console.firebase.google.com/u/0/project/delete-this-1329/settings/serviceaccounts/adminsdk
+
+    "type": "xxxxxx",
+    "project_id": "xxxx",
+    "private_key_id": "xxxxx",
+    "private_key": "xxxxxxxxxxxxx",
+    "client_email": "xxxxxxxxxxxxxxxxxxxxxxxxxxxx",
+    "client_id": "xxxxxx",
+    "auth_uri": "xxxxxxxx",
+    "token_uri": "xxxxxxxxxxx",
+    "auth_provider_x509_cert_url": "xxxxxxxxxxx",
+    "client_x509_cert_url": "xxxxxxxxxxx"
+}
+
 admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    databaseURL: "https://delete-this-1329.firebaseio.com"
+    databaseURL: "xxxxxxxxx"
 });
-const bucket = admin.storage().bucket("gs://delete-this-1329.appspot.com");
+const bucket = admin.storage().bucket("gs:xxxxxxxxxxx");
 
 //==============================================
 
@@ -74,7 +77,7 @@ app.post("/upload", upload.any(), (req, res, next) => {  // never use upload.sin
         // },
         function (err, file, apiResponse) {
             if (!err) {
-                // console.log("api resp: ", apiResponse);
+                // console.log("api  sameer khan resp: ", apiResponse);
 
                 // https://googleapis.dev/nodejs/storage/latest/Bucket.html#getSignedUrl
                 file.getSignedUrl({
@@ -83,6 +86,9 @@ app.post("/upload", upload.any(), (req, res, next) => {  // never use upload.sin
                 }).then((urlData, err) => {
                     if (!err) {
                         console.log("public downloadable url: ", urlData[0]) // this is public downloadable url 
+                        res.send(urlData[0]);
+
+
 
                         // // delete file from folder before sending response back to client (optional but recommended)
                         // // optional because it is gonna delete automatically sooner or later
@@ -96,7 +102,7 @@ app.post("/upload", upload.any(), (req, res, next) => {  // never use upload.sin
                         res.send("Ok");
                     }
                 })
-            }else{
+            } else {
                 console.log("err: ", err)
                 res.status(500).send();
             }
